@@ -14,6 +14,14 @@ class genericDao:
                 cur.execute(query= query, params= params)
                 conn.commit()
                 return cur.rowcount
+    
+    # this has been added, as I have discovered database calls are expensive
+    def execute_many(self, query: str, params_list: list):
+        with self.__get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.executemany(query, params_list)
+                conn.commit()
+                return cur.rowcount
 
     # DQL
     def get_one(self, query:str, params:tuple = ()):
