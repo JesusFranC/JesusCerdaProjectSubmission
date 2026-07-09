@@ -10,6 +10,8 @@ class OpenMeteoClient:
             "start_date": start_date,
             "end_date": end_date,
             "daily": "temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max",
+            "temperature_unit": "fahrenheit",
+            "wind_speed_unit": "mph",
             "timezone": "America/Los_Angeles"
         }
 

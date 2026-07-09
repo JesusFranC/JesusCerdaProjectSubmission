@@ -1,30 +1,26 @@
 # ERD Diagram for DB
-- The following is going to represent the structure of my DB. This will be shown with mermaid
+- The following is going to represent the structure of my DB.
 
 ```mermaid
 ---
 Weather locations and details ERD
 ---
 erDiagram
-    locations{
-        id location_id
-        string location_name
-        string location_timezone
+    cities {
+        int city_id PK
+        string city_name
         decimal latitude
         decimal longitude
     }
-    details{
-        int fk_location_id_pk
-        date details_date_pk
-        string weather_code
-        decimal precipitation_sum
-        decimal max_wind_speed_10m
-        decimal max_wind_gusts_10m
-        string dominant_wind_direction_10m
-        decimal daily_rain_sum
-        decimal mean_temp_2m
-        decimal max_temp_2m
-        decimal min_temp_2m
-    } 
-    locations ||--o{ details: has
+
+    weather_records {
+        int city_id PK
+        date record_date PK
+        decimal temp_max
+        decimal temp_min
+        decimal precipitation
+        decimal wind_speed
+    }
+
+    cities ||--o{ weather_records : has
 ```
