@@ -11,18 +11,25 @@ cities = [("Long Beach", 33.7767, -118.1892),
           ("Pacifica", 37.6138, -122.4869)]
 
 def main():
+    # Time how long everything takes
+    total_time_start = time.time()
     client = OpenMeteoClient()
 
     frames = []
     for city, lat, lon in cities:
         # Catching errors if present
         try:
+            start_date = "2000-01-01"
+            end_date = "2026-01-01"
+            start = time.time()
             weather = client.fetch(
                 lat,
                 lon,
-                "2020-01-01",
-                "2026-07-01"
+                start_date,
+                end_date
             )
+            end = time.time()
+            print(f"{city} weather data from {start_date} to {end_date} took {end-start:.4f} seconds to retrieve")
             # Flatten
             frames.append(flatten_weather(city, weather))
         
@@ -41,11 +48,13 @@ def main():
         print("No weather data was successfully retrieved.")
         return
     
+    print("\n")
     # Gather all frames, profile them (output to command line, then cleans odd or bad data)
     df = pd.concat(frames, ignore_index=True)
     profile_dataframe(df)
     df = clean_dataframe(df) # Note: this also prints the head
-
+    
+    print("\n")
     # Load to DB
     host = "localhost"
     port = 5432
@@ -58,26 +67,27 @@ def main():
     )
     dao = genericDao(conn_string= conn_string)
     dg = dfToGateway(dao= dao)
-
-    print("\n")
+    
+    # Clearing old data from DB
+    start = time.time()
+    dg.clearValuesFromDB()
+    end = time.time()
+    print(f"Clearing the db took {end-start:.4f} seconds")
+    
     # Clocking Performance
     start = time.time()
     dg.addToPostgresDB(cities=cities, df= df)
     end = time.time()
-    print (f"The improved operation took {end - start:.4f} seconds")
-    dg.clearValuesFromDB()
+    print (f"Loading the db took {end - start:.4f} seconds")
 
     ## Previous version performance
     #start = time.time()
     #dg.addToPostgresDGOneByOne(cities=cities, df= df)
     #end = time.time()
     #print (f"The slower operation took {end - start:.4f} seconds")
-    
-    start = time.time()
-    dg.clearValuesFromDB()
-    end = time.time()
-    print(f"Clearing the db takes {end-start:.4f} seconds")
 
+    total_time_end = time.time()
+    print(f"\nThe total execution time of this program is {total_time_end - total_time_start:.4f}")
 
 if __name__ == "__main__":
     main()

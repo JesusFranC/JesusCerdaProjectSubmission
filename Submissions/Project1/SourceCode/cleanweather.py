@@ -19,7 +19,7 @@ def profile_dataframe(df: pd.DataFrame):
     print(df.dtypes)
 
     # Null or missing rows
-    print("\n--- Missing rows ---")
+    print("\n--- Missing/Null value rows ---")
     print(df.isnull().sum())
 
     print("\n--- Duplicate Rows ---")
@@ -28,10 +28,43 @@ def profile_dataframe(df: pd.DataFrame):
     print ("\n--- Data Structure/Head ---")
     print(df.head())
 
-    print("\n--- Summary Statistics ---")
-    print(df.describe())
+    print("\n--- Missing Dates by City ---")
+    for city in df["city"].unique():
+        city_df = df[df["city"] == city]
+        
+        expected_dates = pd.date_range(
+            start=city_df["date"].min(),
+            end=city_df["date"].max(),
+            freq="D"
+        )
+
+        missing_dates = expected_dates.difference(city_df["date"])
+
+        print(f"\n{city}:")
+        print(f"Expected days: {len(expected_dates)}")
+        print(f"Actual days:   {len(city_df)}")
+        print(f"Missing days:  {len(missing_dates)}")
+
+        if len(missing_dates) > 0:
+            print("Missing dates:")
+            print(missing_dates)
+
+    print("\n--- Data Size ---")
+    bytes_used = df.memory_usage(deep=True).sum()
+    units = ["B", "KB", "MB", "GB", "TB"]
+    size = float(bytes_used)
+    for unit in units:
+        if size < 1024 or unit == units[-1]:
+            print(f"DataFrame size: {size:.2f} {unit}")
+            break
+        size /= 1024
+
+    #print("\n--- Summary Statistics ---")
+    #print(df.describe())
 
 def clean_dataframe(df):
+    print("--- Data Cleaning ---")
+    
     # Get count of how many rows we started with
     original_rows = len(df)
 

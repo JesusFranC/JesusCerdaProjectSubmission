@@ -125,6 +125,8 @@ class dfToGateway:
         #print(f"Inserted/updated {inserted} weather records")
         #print(f"Processed {len(city_ids)} cities")
 
+    # TODO: These queries, and more, are written in my SQLqueries.sql file in this repository
+    # In order to speed up development time, I have opted not to write these into the python program here, and just execute the queries in pgAdmin
     def queryHighestTemp(self):
         pass
 
