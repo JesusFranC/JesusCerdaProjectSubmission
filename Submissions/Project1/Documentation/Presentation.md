@@ -38,6 +38,32 @@ sequenceDiagram
     dg-->>m: No return value if successful
 
 ```
+Finally, our Database has a structure as well. It only has two tables, which keeps things fairly simple.
+```mermaid
+---
+Weather locations and details ERD
+---
+erDiagram
+    cities {
+        int city_id PK
+        string city_name
+        decimal latitude
+        decimal longitude
+    }
+
+    weather_records {
+        int city_id PK
+        date record_date PK
+        decimal temp_max
+        decimal temp_min
+        decimal precipitation
+        decimal wind_speed
+    }
+
+    cities ||--o{ weather_records : has
+```
+
+
 ## Execution
 All of the different steps in this process are logged to the console as they execute, and I have additionally added various timers to measure performance. I have chosen all dates from the start of 2000 to the start of 2026. The cites I choses are Pacifica, Monterey, and Long Beach CA.
 
