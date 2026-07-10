@@ -39,13 +39,14 @@ sequenceDiagram
 
 ```
 ## Execution
-All of the different steps in this process are logged to the console as they execute, and I have additionally added various timers to measure performance
+All of the different steps in this process are logged to the console as they execute, and I have additionally added various timers to measure performance. I have chosen all dates from the start of 2000 to the start of 2026. The cites I choses are Pacifica, Monterey, and Long Beach CA.
 
 ## Problems I encountered
+I did not run into any data issues during the duration of this project.
 This iteration of the project mostly went smoothly, however the biggest issue came up while I was trying to scale.
 
 ### Database operations are expensive (computationally)
-My original reusable DAO did not have an execute many statement, so each insert was its own transaction. Although this worked fine for other projects with smaller datasets, it scaled horribly when I tried to insert the 20,000 rows I collected from the API.
+My original DAO did not have an `executemany` statement, so each insert was its own transaction. Although this worked fine for other projects with smaller datasets, it scaled horribly when I tried to insert the 20,000 rows I collected from the API.
 ```
 --- Summary Statistics ---
                     date     temp_max     temp_min  precipitation   wind_speed
