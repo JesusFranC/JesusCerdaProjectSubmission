@@ -63,7 +63,7 @@ def profile_dataframe(df: pd.DataFrame):
     #print(df.describe())
 
 def clean_dataframe(df):
-    print("--- Data Cleaning ---")
+    print("\n--- Data Cleaning ---")
     
     # Get count of how many rows we started with
     original_rows = len(df)
